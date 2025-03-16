@@ -1,0 +1,89 @@
+/* TheatreShows.css */
+
+.theatre-container {
+    background-color: #202020;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.theatre-header h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.theatre-location {
+    font-size: 14px;
+    color: #666;
+}
+
+.date-selector {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    margin-top: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.date-btn {
+    background-color: #f5f5f5;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+}
+
+.date-btn.active {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.show-list {
+    margin-top: 20px;
+}
+
+.show-card {
+    /* background: #fafafa; */
+    padding: 15px;
+    border-radius: 5px;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 2px 5px rgba(101, 100, 100, 0.611);
+    margin-bottom: 15px;
+}
+
+.movie-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.movie-info {
+    font-size: 14px;
+    color: #777;
+}
+
+.show-times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.show-time-btn {
+    /* background: #fff; */
+    color: #202020;
+    text-decoration: none;
+    background: #d95353;
+    border: 1px solid #b71818;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.show-time-btn:hover {
+    background: #d32f2f;
+    color: white;
+}

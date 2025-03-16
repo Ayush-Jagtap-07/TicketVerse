@@ -1,0 +1,96 @@
+.link {
+    text-decoration: none !important;
+    color: white !important;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.link:hover {
+    text-decoration: underline !important;
+}
+
+.modal-header,
+.modal-footer {
+    border: none !important;
+    color: white !important;
+}
+
+
+/* .radio-buttons {
+    background-color: transparent !important;
+    border: 1px solid #dcae6e !important;
+} */
+
+.btn-group label:last-of-type {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+
+.btn-delete {
+    all: unset;
+    display: inline-block;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    /* margin-bottom: 1.25rem; */
+}
+
+.dash-btn-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+input[type=radio]:checked+label {
+    background-color: white !important;
+    color: black !important;
+}
+
+ /* --------------------- Authentication Page Styling --------------------- */
+
+.AuthContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border: white 2px solid;
+    margin: 2rem;
+    padding: 2rem;
+    min-height: 15rem;
+}
+
+.h1-container h1{
+    display: inline;
+    cursor: pointer;
+}
+
+.form-container h1 {
+    cursor: pointer;
+} 
+
+.disabled {
+    opacity: 0.4;
+}
+
+.form-hide {
+    display: none;
+}
+
+.btn-success {
+    background-color: #198754;
+}
+
+/* .bg-danger {
+    background-color: rgb(255, 132, 132) !important;
+}
+*/
+
+.bg-warning {
+    background-color: #f0bb53 !important;
+}
+
+/* .bg-info {
+    background-color: #79bdd4 !important;
+} */ 
