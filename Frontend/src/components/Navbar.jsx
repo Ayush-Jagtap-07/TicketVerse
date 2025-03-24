@@ -27,7 +27,7 @@ function Navbar() {
                                 <li className="nav-item">
                                     <button className="nav-link" onClick={handleclick} to="/login">Logout</button>
                                 </li>
-                                {user.role === 'admin' && (
+                                {user.role === 'superAdmin' && (
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/dashboard">Dashboard</Link>
                                     </li>

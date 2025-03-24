@@ -63,7 +63,7 @@ function App() {
 
 
               {/* Admin Dashboard route, nested routes for Movies, Events, and Theatres */}
-              <Route path='/dashboard/' element={<ProtectedRoute requiredRoles={["admin"]} >{<AdminDashboard />}</ProtectedRoute>}>
+              <Route path='/dashboard/' element={<ProtectedRoute requiredRoles={["superAdmin"]} >{<AdminDashboard />}</ProtectedRoute>}>
                 {/* Movies Routes */}
                 <Route path="movies" element={<AdminMoviePage />} />
                 <Route path="movies/add" element={<AddMoviePage />} />
