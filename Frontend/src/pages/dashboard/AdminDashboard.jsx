@@ -11,6 +11,9 @@ function AdminDashboard() {
     const [count, setCount] = useState({});
     const location = useLocation();
 
+    // Check if we are on a nested route (edit/addShowTimes)
+    const isNestedRoute = location.pathname.includes("movies") || location.pathname.includes("events") || location.pathname.includes("theatres");
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -62,7 +65,7 @@ function AdminDashboard() {
         }
     ];
 
-    if (location.pathname.includes("movies") || location.pathname.includes("events") || location.pathname.includes("theatres")) {
+    if (isNestedRoute) {
         return (
             <div className='container' >
                 <Link to={'/dashboard'} className="link text-center" ><h1 className="mt-5 mb-4" >Admin Dashboard</h1></Link>

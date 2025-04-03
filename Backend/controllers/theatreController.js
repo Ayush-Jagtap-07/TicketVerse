@@ -1,7 +1,9 @@
 const Theatre = require("../models/theatreModel");
 const Movie = require("../models/movieModel");
 const ShowTime = require("../models/showTimeModel");
+const User = require("../models/userModel");
 const { convertTo12HourFormat } = require("../utils/helper");
+const mongoose = require("mongoose");
 
 const ExpressError = require("../utils/ExpressError");
 
@@ -104,6 +106,18 @@ module.exports.addNewTheatre = async (req, res) => {
     }
 };
 
+module.exports.editTheatre = async (req, res) => {
+    try{
+    console.log(req.body);
+    const id = req.params.id
+    await Theatre.findByIdAndUpdate(id, { ...req.body});
+    res.status(200).json({ message: "Movie updated successfully!" });
+    } catch(error){
+        console.error("Error updating theatre:", error.message);
+        res.status(error.status || 500).json({ error: error.message });
+    }
+}
+
 module.exports.deleteTheatre = async (req, res) => {
     try {
         const { id } = req.params;
@@ -179,7 +193,7 @@ module.exports.addNewShowTime = async (req, res) => {
             movieId,
             theatreId,
             date,
-            time:newtime,
+            time: newtime,
             basePrice
         });
 
@@ -201,11 +215,11 @@ module.exports.getAllShowTimes = async (req, res) => {
         if (!theatre) {
             return res.status(404).json({ message: "Theatre not found" });
         }
-        
+
         const shows = await ShowTime.find({ theatreId })
             .populate("movieId", "title language format")
             .sort({ date: 1, time: 1 });
-        
+
         const groupedShows = {};
         shows.forEach(show => {
             const dateKey = show.date.toISOString().split("T")[0];
@@ -220,9 +234,28 @@ module.exports.getAllShowTimes = async (req, res) => {
             });
         });
         console.log(groupedShows);
-        
+
         res.json({ theatre, shows: groupedShows });
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
+    }
+}
+
+module.exports.getAdminTheatreInfo = async (req, res) => {
+    try {
+        const { userId } = req.params; // Get user ID from request parameters
+        if (!userId) {
+            return res.status(404).json({ message: "User Id not found" });
+        }
+        console.log("Admin Page user Id : " + userId);
+        const theatre = await Theatre.findOne({ admin: userId });
+        if (!theatre) {
+            return res.status(404).json({ message: "Theatre not found" });
+        }
+        console.log("theatre :" + theatre);
+        res.status(200).json(theatre);
+    } catch (error) {
+        console.error("Error fetching admin theatre info:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 }

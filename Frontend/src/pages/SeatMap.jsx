@@ -6,7 +6,7 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [viewMode, setViewMode] = useState('desktop');
   const [showLegend, setShowLegend] = useState(false);
-  // console.log(seats);
+  console.log(seats);
 
   const generateSeatMap = () => {
     let seatMap = [];

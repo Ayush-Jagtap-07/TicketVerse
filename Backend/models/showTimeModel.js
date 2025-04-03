@@ -1,18 +1,5 @@
 const mongoose = require("mongoose");
 
-// const showTimeSchema = new mongoose.Schema({
-//     movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie', required: true },
-//     theatreId: { type: mongoose.Schema.Types.ObjectId, ref: 'Theatre', required: true },
-//     date: { type: Date, required: true },
-//     times: [
-//         {
-//             time: { type: String, required: true }, // e.g., "10:00 AM"
-//             ticketsAvailable: { type: Number, required: true },
-//             price: { type: Number, required: true },
-//         }
-//     ]
-// });
-
 
 // models/Showtime.js
 const seatSchema = new mongoose.Schema({
@@ -78,21 +65,6 @@ const showTimeSchema = new mongoose.Schema({
             default: 0
         }
     }
-    // seatMap: {
-    //     rows: [{
-    //         rowNumber: String,
-    //         isAisleRow: { type: Boolean, default: false },
-    //         seats: [seatSchema]
-    //     }],
-    //     availableCount: {
-    //         type: Number,
-    //         default: 0
-    //     },
-    //     bookedCount: {
-    //         type: Number,
-    //         default: 0
-    //     }
-    // }
 });
 
 // Utility method to generate seat map based on theatre layout

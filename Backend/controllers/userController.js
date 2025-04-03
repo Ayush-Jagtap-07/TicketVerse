@@ -74,7 +74,7 @@ module.exports.getRefreshToken = async (req, res) => {
         // Verify the refresh token
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
             if (err) return res.status(403).json({ message: 'Invalid refresh token' });
-
+            console.log(decoded)
             // Generate new access token
             const accessToken = generateAccessToken(decoded);
             // console.log(`Refresh route access token : ${accessToken}`);

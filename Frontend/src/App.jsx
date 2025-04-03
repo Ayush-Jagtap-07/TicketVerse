@@ -39,6 +39,8 @@ import SeatMap from './pages/SeatMap';
 import ShowTimePage from './pages/ShowTimePage';
 
 
+import TheatreAdminDashboard from './pages/theatre-admin-dashboard/TheatreAdminDashboard';
+
 // import { useAuth } from './context/AuthContext';
 // import createAxiosInstance from './api/axios';
 
@@ -46,9 +48,9 @@ function App() {
 
   return (
     <>
-    <AuthProvider>
-      {/* Scroll to top component to handle scrolling behavior on route changes */}
-      <ScrollToTop />
+      <AuthProvider>
+        {/* Scroll to top component to handle scrolling behavior on route changes */}
+        <ScrollToTop />
         <Navbar />
 
         <div className='main-div'>
@@ -62,25 +64,35 @@ function App() {
             {/* <Route element={<ProtectedRoute requiredRoles={["admin"]} />}> */}
 
 
-              {/* Admin Dashboard route, nested routes for Movies, Events, and Theatres */}
-              <Route path='/dashboard/' element={<ProtectedRoute requiredRoles={["superAdmin"]} >{<AdminDashboard />}</ProtectedRoute>}>
-                {/* Movies Routes */}
-                <Route path="movies" element={<AdminMoviePage />} />
-                <Route path="movies/add" element={<AddMoviePage />} />
-                <Route path="movies/edit/:id" element={<EditMoviePage />} />
+            {/* Admin Dashboard route, nested routes for Movies, Events, and Theatres */}
+            <Route path='/dashboard/' element={<ProtectedRoute requiredRoles={["superAdmin"]} >{<AdminDashboard />}</ProtectedRoute>}>
+              {/* Movies Routes */}
+              <Route path="movies" element={<AdminMoviePage />} />
+              <Route path="movies/add" element={<AddMoviePage />} />
+              <Route path="movies/edit/:id" element={<EditMoviePage />} />
 
-                {/* Events Routes */}
-                <Route path="events" element={<AdminEventPage />} />
-                <Route path="events/add" element={<AddEventPage />} />
-                <Route path="events/edit/:id" element={<EditEventPage />} />
+              {/* Events Routes */}
+              <Route path="events" element={<AdminEventPage />} />
+              <Route path="events/add" element={<AddEventPage />} />
+              <Route path="events/edit/:id" element={<EditEventPage />} />
 
-                {/* Theatres Routes */}
-                <Route path="theatres" element={<AdminTheatrePage />} />
-                <Route path="theatres/add" element={<AddTheatrePage />} />
-                <Route path="theatres/edit/:id" element={<EditTheatrePage />} />
-                <Route path="theatres/addShowTimes/:id" element={<AddShowTimesPage />} />
-              </Route>
+              {/* Theatres Routes */}
+              <Route path="theatres" element={<AdminTheatrePage />} />
+              <Route path="theatres/add" element={<AddTheatrePage />} />
+              <Route path="theatres/edit/:id" element={<EditTheatrePage />} />
+              <Route path="theatres/addShowTimes/:id" element={<AddShowTimesPage />} />
+            </Route>
 
+
+            {/* <Route path='/adminDashboard/' element={<ProtectedRoute requiredRoles={["admin"]} >{< TheatreAdminDashboard />}</ProtectedRoute>}>
+              {/* <Route path="theatre" element={<TheatrePage />} /> */}
+            {/* <Route path="theatre/edit/:id" element={<EditTheatrePage />} />
+              <Route path="theatre/addShowTimes/:id" element={<AddShowTimesPage />} />
+            </Route> */}
+
+            <Route path='/adminDashboard/' element={<ProtectedRoute requiredRoles={["admin"]} > < TheatreAdminDashboard /> </ProtectedRoute>} />
+            <Route path='/adminDashboard/theatre/edit/:id' element={<ProtectedRoute requiredRoles={["admin"]} > < EditTheatrePage /> </ProtectedRoute>} />
+            <Route path='/adminDashboard/theatre/addShowTimes/:id' element={<ProtectedRoute requiredRoles={["admin"]} > < AddShowTimesPage /> </ProtectedRoute>} />
 
             {/* </Route> */}
 
@@ -94,7 +106,7 @@ function App() {
 
 
             {/* Dynamic routes for Movie and Event pages, using their IDs */}
-            
+
             <Route path='/event/:id' element={<EventPage />} />
             <Route path='/movie/:id' element={<MoviePage />} />
             <Route path='/theatre/:id' element={<TheatrePage />} />

@@ -16,6 +16,9 @@ router.get("/:id", theatreController.getTheatreInfo);
 // Endpoint to add a new theatre to the dashboard
 router.post("/add", theatreController.addNewTheatre);
 
+// Endpoint to edit theatre to the dashboard
+router.put("/edit/:id", theatreController.editTheatre);
+
 // Endpoint to delete a theatre from dashboard
 router.delete("/delete/:id", theatreController.deleteTheatre);
 
@@ -24,5 +27,7 @@ router.post('/add-showtime', theatreController.addNewShowTime);
 
 // GET all shows of a specific theatre, sorted by date and time
 router.get("/:theatreId/shows", theatreController.getAllShowTimes);
+
+router.get("/admin-theatre-info/:userId", theatreController.getAdminTheatreInfo);
 
 module.exports = router;

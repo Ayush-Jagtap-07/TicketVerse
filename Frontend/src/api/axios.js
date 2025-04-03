@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-
+import { useCookies } from "react-cookie";
 
 // Creating a common Axios instance
 const axiosInstance = axios.create({
@@ -44,9 +44,9 @@ axiosInstance.interceptors.response.use(
             } catch (error) {
                 // If refresh token fails, log the user out
                 console.error("Token refresh failed", error);
-                removeCookie('accessToken', { path: '/' });
-                removeCookie('refreshToken', { path: '/' });
-                setUser({ isLoggedIn: false });
+                Cookies.remove('accessToken', { path: '/' });
+                Cookies.remove('refreshToken', { path: '/' });
+                // setUser({ isLoggedIn: false });
                 return Promise.reject(error);
             }
         }
