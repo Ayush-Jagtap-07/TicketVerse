@@ -13,7 +13,7 @@ function MoviePage() {
                 const response = await axios.get(`/movie/${id}`);
                 setMovie(response.data);
             } catch (error) {
-                console.error("Error fetching movie data:", error);
+                console.error("Error fetching movie data:", error.response?.data?.message);
             }
         }
         fetchData();

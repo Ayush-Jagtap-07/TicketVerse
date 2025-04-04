@@ -8,6 +8,7 @@ function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState({});
     const [loading, setLoading] = useState(true);
+    const [ticketCount, setTicketCount] = useState(0);
 
     useEffect(() => {
         axios.get(`http://localhost:8080/event/${id}`).then((res) => {
@@ -19,6 +20,42 @@ function EventPage() {
             setLoading(false);
         });
     }, [id]);
+
+    // const handleSubmit = () => {
+    //     if (!ticketCount || ticketCount === 0) return console.log("Enter value");
+    //     console.log(typeof (ticketCount));
+
+    //     let data = {
+    //         eventId: id,
+    //         ticketCount: ticketCount
+    //     }
+
+    //         axios.post(`http://localhost:8080/event/book/${id}`, data).catch((error) => {
+    //             console.error("Error booking event:", error);
+    //         });
+
+    // }
+
+    const handleSubmit = async () => {
+        if (!ticketCount || Number(ticketCount) <= 0) {
+            console.log("Enter a valid number of tickets");
+            return;
+        }
+    
+        const data = {
+            eventId: id,
+            ticketCount: Number(ticketCount),
+        };
+    
+        try {
+            const response = await axios.post(`http://localhost:8080/event/book/${id}`, data);
+            console.log("Booking successful:", response.data);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error booking event:", error.response?.data || error.message);
+        }
+    };
+    
 
 
     if (loading) return <div>Loading...</div>;
@@ -38,6 +75,29 @@ function EventPage() {
                     <p className="card-text"><strong>Organizer:</strong> {event.organizer}</p>
                     <p className="card-text"><strong>Tickets Available:</strong> {event.ticketsAvailable}</p>
                     <p className="card-text"><strong>Price:</strong> &#8377; {event.price}</p>
+
+                    {/* Tickets Available */}
+                    <div className="mb-3 col-md-4">
+                        <label htmlFor="tickets" className="form-label">Enter number of tickets</label>
+                        <input
+                            type="number"
+                            value={ticketCount}
+                            id="tickets"
+                            onChange={(e) => { setTicketCount(Number(e.target.value)) }}
+                            // {...register('ticketsAvailable', { required: 'Tickets Available is required' })}
+                            placeholder="Enter number of tickets"
+                            // ${errors.ticketsAvailable ? 'is-invalid' : ''}
+                            className={`form-control `}
+                        />
+                        {/* {errors.ticketsAvailable && (
+                            <div className="invalid-feedback">{errors.ticketsAvailable.message}</div>
+                        )} */}
+
+                        {/* Submit Button */}
+                        <button type="submit" onClick={handleSubmit} className="btn btn-danger mt-3">
+                            Book
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

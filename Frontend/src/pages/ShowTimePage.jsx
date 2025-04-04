@@ -73,6 +73,7 @@ function ShowTimePage() {
         try {
             await axios.post(`/showtime/book/${id}`, { seats: selectedSeats });
             alert("Booking successful!");
+            window.location.reload();
         } catch (error) {
             console.error("Error booking seats", error);
         }

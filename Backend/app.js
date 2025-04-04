@@ -114,29 +114,29 @@ app.get('/showtime/:id', async (req, res) => {
 app.post('/showtime/book/:id', async (req, res) => {
     try {
         const { seats } = req.body;
-        console.log(seats);
+        // console.log(seats);
         if (!seats || !Array.isArray(seats) || seats.length === 0) {
           return res.status(400).json({ message: 'Please select seats to book' });
         }
-        console.log(req.params.id);
+        // console.log(req.params.id);
         const showtime = await ShowTime.findById(req.params.id);
         
         if (!showtime) {
           return res.status(404).json({ message: 'Showtime not found' });
         }
-        console.log(showtime);
+        // console.log(showtime);
         // Check if all seats are available
         const unavailableSeats = [];
         seats.forEach(s1 => {
-            console.log("Searching for seat:", s1.seatNumber);
+            // console.log("Searching for seat:", s1.seatNumber);
           const seat = showtime.seatMap.seats.find(s => s.seatNumber === s1.seatNumber);
-          console.log('Seats :',seat);
+          // console.log('Seats :',seat);
           if (!seat || seat.status !== 'AVAILABLE') {
             unavailableSeats.push(seatNumber);
           }
         });
 
-        console.log('Unavailable seats :', unavailableSeats);
+        // console.log('Unavailable seats :', unavailableSeats);
         
         if (unavailableSeats.length > 0) {
           return res.status(400).json({
