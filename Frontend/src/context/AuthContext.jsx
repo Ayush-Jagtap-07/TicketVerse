@@ -25,6 +25,8 @@ export const AuthProvider = ({ children }) => {
                     setUser({
                         id: decodedToken.id,
                         role: decodedToken.role,
+                        name: decodedToken.name, 
+                        email: decodedToken.email, 
                         isLoggedIn: true,
                     });
                 })
@@ -41,6 +43,8 @@ export const AuthProvider = ({ children }) => {
             setUser({
                 id: decodedToken.id,
                 role: decodedToken.role,
+                name: decodedToken.name, 
+                email: decodedToken.email, 
                 isLoggedIn: true,
             });
             setLoading(false);

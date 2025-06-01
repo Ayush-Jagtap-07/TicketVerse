@@ -1,7 +1,10 @@
 const Event = require("../models/eventModel");
-const { convertTo12HourFormat } = require("../utils/helper");
+const User = require("../models/userModel");
+const { convertTo12HourFormat, sendTicketEmail, generateTicketPDF } = require("../utils/helper");
+const path = require('path');
+const fs = require('fs');
 
-module.exports.getAllEvents =  async (req, res) => {
+module.exports.getAllEvents = async (req, res) => {
     try {
         const allEvents = await Event.find({});
         res.json(allEvents);
@@ -11,7 +14,7 @@ module.exports.getAllEvents =  async (req, res) => {
     }
 }
 
-module.exports.getMovieDetails = async (req, res) => {
+module.exports.getEventDetails = async (req, res) => {
 
     try {
         const id = req.params.id;
@@ -77,37 +80,66 @@ module.exports.deleteEvent = async (req, res) => {
     }
 }
 
-// module.exports.bookTickets = async (req, res) => {
-//     console.log(req.body);
-//     const { eventId, ticketCount } = req.body;
-//     let event = Event.findByIdAndUpdate()
-// }
-
-module.exports.bookTickets = async (req, res) => {
+exports.bookTickets = async (req, res) => {
     try {
-        console.log(req.body);
-        const { eventId, ticketCount } = req.body;
+        const { eventId, ticketCount, paymentId } = req.body;
+        console.log(req.user)
+        const userId = req.user.id;
 
-        if (!eventId || !ticketCount || ticketCount <= 0) {
-            return res.status(400).json({ message: "Invalid event ID or ticket count" });
-        }
-
+        // Fetch event
         const event = await Event.findById(eventId);
-
-        if (!event) {
-            return res.status(404).json({ message: "Event not found" });
-        }
-
-        if (event.ticketsAvailable < ticketCount) {
+        if (!event || event.ticketsAvailable < ticketCount) {
             return res.status(400).json({ message: "Not enough tickets available" });
         }
 
+        // Fetch user
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Update tickets
         event.ticketsAvailable -= ticketCount;
         await event.save();
 
-        return res.status(200).json({ message: "Tickets booked successfully", event });
+        // Generate ticket folder
+        const ticketDir = path.join(__dirname, '..', 'tickets');
+        if (!fs.existsSync(ticketDir)) {
+            fs.mkdirSync(ticketDir);
+        }
+
+        const fileName = `ticket_${Date.now()}.pdf`;
+        const filePath = path.join(ticketDir, fileName);
+
+        console.log("About to generate PDF at:", filePath);
+
+        // Generate ticket PDF
+        await generateTicketPDF({
+            eventName: event.name,
+            name: user.username,
+            email: user.email,
+            ticketCount,
+            eventDate: event.date.toDateString(),
+            eventTime: event.time,
+            venueName: event.venue.name,
+            venueAddress: event.venue.address,
+            organizer: event.organizer,
+            price: event.price
+        }, filePath, "event");
+        console.log("PDF generation completed successfully");
+
+        console.log("📨 Preparing to send email...");
+
+        // Send email
+        await sendTicketEmail(user.email, user.username, filePath, "event");
+
+        console.log("✅ Email function awaited");
+
+        res.json({ success: true, message: "Tickets booked & emailed!" });
+
     } catch (error) {
         console.error("Error booking tickets:", error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal server error" });
     }
 };
+

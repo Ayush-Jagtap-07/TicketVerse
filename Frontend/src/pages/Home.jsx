@@ -73,9 +73,9 @@ function Home() {
             <div className="row">
                 {filteredEvents.length > 0 ? (
                     filteredEvents.map(event => (
-                        <div className="col-md-3 mb-4" key={event._id}>
-                            <div className="card bg border">
-                                <img src={event.posterUrl} className="card-img-top" alt={event.name} />
+                        <div className="col-md-3 mb-4 d-flex" key={event._id}>
+                            <div className="card bg border flex-fill d-flex flex-column">
+                                <img src={event.posterUrl} className="card-img-top" alt={event.name} style={{ height: '250px', objectFit: 'contain' }} />
                                 <div className="card-body">
                                     <h5 className="card-title">{event.name}</h5>
                                     <p className="card-text">

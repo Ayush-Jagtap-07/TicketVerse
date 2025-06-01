@@ -11,8 +11,10 @@ const LocalStrategy = require('passport-local');
 const movieRouter = require("./routes/movieRoutes");
 const eventRouter = require("./routes/eventRoutes");
 const theatreRouter = require("./routes/theatreRoutes");
+const showtimeRouter = require("./routes/showtimeRoutes");
 const userRouter = require("./routes/userRoutes");
 const generalRouter = require("./routes/generalRoutes");
+const paymentRouter = require("./routes/paymentRoutes");
 
 const User = require('./models/userModel');
 const ShowTime = require('./models/showTimeModel');
@@ -81,6 +83,14 @@ app.use("/theatre", theatreRouter);
 
 app.use("/", userRouter);
 
+// -------------------- Showtime APIs --------------------
+
+app.use("/showtime", showtimeRouter);
+
+
+
+app.use('/payment', paymentRouter);
+
 // app.get('/showtime/:id', async (req, res) => {
 //     try {
 //         console.log(req.params.id);
@@ -93,85 +103,3 @@ app.use("/", userRouter);
 //     }
 // });
 
-app.get('/showtime/:id', async (req, res) => {
-    try {
-        console.log(req.params.id);
-        const show1 = await ShowTime.findById(req.params.id);
-        // console.log(show1.seatMap);
-        const show = await ShowTime.findById(req.params.id)
-            .populate('movieId', 'title')
-            .populate('theatreId');
-            // .select('-seatMap'); // Excludes seatMap from the response
-
-        if (!show) return res.status(404).json({ message: 'Show not found' });
-        // console.log(show);
-        res.json(show);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-app.post('/showtime/book/:id', async (req, res) => {
-    try {
-        const { seats } = req.body;
-        // console.log(seats);
-        if (!seats || !Array.isArray(seats) || seats.length === 0) {
-          return res.status(400).json({ message: 'Please select seats to book' });
-        }
-        // console.log(req.params.id);
-        const showtime = await ShowTime.findById(req.params.id);
-        
-        if (!showtime) {
-          return res.status(404).json({ message: 'Showtime not found' });
-        }
-        // console.log(showtime);
-        // Check if all seats are available
-        const unavailableSeats = [];
-        seats.forEach(s1 => {
-            // console.log("Searching for seat:", s1.seatNumber);
-          const seat = showtime.seatMap.seats.find(s => s.seatNumber === s1.seatNumber);
-          // console.log('Seats :',seat);
-          if (!seat || seat.status !== 'AVAILABLE') {
-            unavailableSeats.push(seatNumber);
-          }
-        });
-
-        // console.log('Unavailable seats :', unavailableSeats);
-        
-        if (unavailableSeats.length > 0) {
-          return res.status(400).json({
-            message: `The following seats are unavailable: ${unavailableSeats.join(', ')}`,
-            unavailableSeats
-          });
-        }
-        
-        // Book the seats
-        await showtime.bookSeats(seats);
-        
-        // Create a booking record (simplified, you'd likely have a separate Booking model)
-        // This is just a placeholder for the complete implementation
-        const booking = {
-        //   user: req.user.id,
-          showtime: showtime._id,
-          seats,
-          totalAmount: seats.reduce((total, seatNumber) => {
-            const seat = showtime.seatMap.seats.find(s => s.seatNumber === seatNumber);
-            return total + (seat ? seat.price : 0);
-          }, 0),
-          bookingDate: Date.now()
-        };
-        
-        // Here you would save the booking to your database
-        
-        res.json({ 
-          message: 'Seats booked successfully',
-          booking
-        });
-      } catch (err) {
-        console.error(err);
-        if (err.message.includes('already booked') || err.message.includes('not found')) {
-          return res.status(400).json({ message: err.message });
-        }
-        res.status(500).json({ message: 'Server error' });
-      }
-});

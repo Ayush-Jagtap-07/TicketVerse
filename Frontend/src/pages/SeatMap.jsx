@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Zap, Info } from 'lucide-react';
 
 const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
@@ -6,6 +6,7 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [viewMode, setViewMode] = useState('desktop');
   const [showLegend, setShowLegend] = useState(false);
+  console.log("Seats from seatmap :");
   console.log(seats);
 
   const generateSeatMap = () => {
@@ -35,16 +36,30 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
         }
 
         const seatNumber = `${String.fromCharCode(64 + row)}${col}`;
-        const status = seats.filter(seat => seat.seatNumber == seatNumber)[0].status;
+        // const status = seats.filter(seat => seat.seatNumber == seatNumber)[0].status;
         // console.log(status);
+
+        const seatMapByNumber = useMemo(() => {
+          const map = {};
+          seats.forEach(seat => {
+            map[seat.seatNumber] = seat;
+          });
+          return map;
+        }, [seats]);
+
+        // const seat = seats.filter(seat => seat.seatNumber == seatNumber)[0];
+        const seat = seatMapByNumber[seatNumber];
         rowSeats.push({
           seatNumber,
           row: String.fromCharCode(64 + row),
           rowNumber: row,
           column: col,
-          category: rowLabels[row]?.name || 'STANDARD',
-          price: rowLabels[row]?.price || 100,
-          status: status
+          // category: rowLabels[row]?.name || 'STANDARD',
+          category: seat.category,
+          // price: rowLabels[row]?.price || 100,
+          price: seat.price || 100,
+          // status: status
+          status: seat.status
         });
       }
       seatMap.push(rowSeats);
@@ -54,29 +69,6 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
 
   const seatMap = generateSeatMap();
   // console.log(seatMap);
-
-
-  // const handleSeatClick = (seat) => {
-  //   if (seat.status === 'DISABLED') return;
-  //   setSelectedSeats((prev) =>
-  //     prev.includes(seat.seatNumber)
-  //       ? prev.filter((s) => s !== seat.seatNumber)
-  //       : [...prev, seat.seatNumber]
-  //   );
-
-  //   // Send seat details (including price and category) to ShowTimePage
-  //   const selectedSeatDetails = selectedSeats.map(seatNum => {
-  //     for (const row of seatMap) {
-  //       if (Array.isArray(row)) {
-  //         const seat = row.find(s => s.seatNumber === seatNum);
-  //         if (seat) return seat;
-  //       }
-  //     }
-  //     return null;
-  //   }).filter(Boolean);
-
-  //   onSeatSelect(selectedSeatDetails);
-  // };
 
   const handleSeatClick = (seat) => {
     if (seat.status === 'DISABLED') return;
@@ -112,38 +104,6 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
       case 'STANDARD': return { bgClass: 'bg-info', textClass: 'text-white', borderClass: 'border-info' };
       default: return { bgClass: 'bg-secondary', textClass: 'text-white', borderClass: 'border-secondary' };
     }
-  };
-
-  const getTotalPrice = () => {
-    let total = 0;
-    selectedSeats.forEach(seatNum => {
-      // Find the seat in our map
-      for (const row of seatMap) {
-        if (Array.isArray(row)) {
-          const seat = row.find(s => s.seatNumber === seatNum);
-          if (seat) {
-            total += seat.price;
-            break;
-          }
-        }
-      }
-    });
-    return total;
-  };
-
-  // Function to get all non-aisle seats flattened for mobile view
-  const getAllSeats = () => {
-    const allSeats = [];
-    seatMap.forEach(row => {
-      if (Array.isArray(row)) {
-        row.forEach(seat => {
-          if (seat.seatNumber) {
-            allSeats.push(seat);
-          }
-        });
-      }
-    });
-    return allSeats;
   };
 
   return (
@@ -332,18 +292,23 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
                           <button
                             id={`seat-${seat.seatNumber}`}
                             key={seat.seatNumber}
-                            className={`mx-1 rounded-top position-relative small fw-medium 
-                        ${seat.status === 'DISABLED' ? 'btn-light border' :
-                                selectedSeats.includes(seat.seatNumber) ? ' btn-success text-white' :
-                                  `border ${categoryStyle.bgClass} ${categoryStyle.borderClass}`}`}
+                            className={`
+                            mx-1 rounded-top position-relative small fw-medium 
+                            ${seat.status === 'BOOKED'
+                                ? 'btn-light border text-white'
+                                : selectedSeats.includes(seat.seatNumber)
+                                  ? ' btn-success text-white'
+                                  : `border ${categoryStyle.bgClass} ${categoryStyle.borderClass}`
+                              }
+                          `}
                             style={{
-                              width: '32px',
-                              height: '32px',
-                              cursor: seat.status === 'DISABLED' ? 'not-allowed' : 'pointer',
-                              opacity: seat.status === 'DISABLED' ? 0.5 : 1,
+                              width: "32px",
+                              height: "32px",
+                              cursor: seat.status === 'BOOKED' ? 'not-allowed' : 'pointer',
+                              opacity: seat.status === 'BOOKED' ? 0.5 : 1,
                               transition: 'transform 0.2s'
                             }}
-                            disabled={seat.status === 'DISABLED'}
+                            disabled={seat.status === 'BOOKED'}
                             onClick={() => handleSeatClick(seat)}
                             title={`${seat.category} - ₹${seat.price}`}
                             onMouseOver={(e) => {
@@ -370,37 +335,6 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
       )}
 
 
-      {/* Seat Map - Mobile/Compact View */}
-      {/* {viewMode === 'mobile' && (
-        <div className="row row-cols-6 row-cols-sm-8 row-cols-md-10 g-1 mb-4">
-          {getAllSeats().map((seat, index) => {
-            const categoryStyle = getCategoryStyle(seat.category);
-
-            return (
-              <div className="col" key={seat.seatNumber}>
-                <button
-                  id={`seat-${seat.seatNumber}`}
-                  className={`
-                    w-100 py-2 rounded position-relative d-flex flex-column align-items-center justify-content-center
-                    ${seat.status === 'DISABLED'
-                      ? 'btn-light border'
-                      : selectedSeats.includes(seat.seatNumber)
-                        ? ' btn-success text-white'
-                        : `border ${categoryStyle.bgClass} ${categoryStyle.borderClass}`
-                    }
-                  `}
-                  disabled={seat.status === 'DISABLED'}
-                  onClick={() => handleSeatClick(seat)}
-                  title={`${seat.category} - ₹${seat.price}`}
-                >
-                  <span style={{ fontSize: "0.65rem" }}>{seat.row}</span>
-                  <span className="fw-bold small">{seat.column}</span>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )} */}
 
       {/* Screen */}
       <div className="text-center mt-4 mb-5">
@@ -409,53 +343,6 @@ const SeatSelection = ({ theatreLayout, seats, onSeatSelect }) => {
           <div className="small mt-1">SCREEN</div>
         </div>
       </div>
-      {/* Selected Seats Summary */}
-      {/* <div className="card mt-4">
-        <div className="card-body">
-          <h3 className="card-title h5">Your Selection</h3>
-          {selectedSeats.length > 0 ? (
-            <div>
-              <div className="d-flex flex-wrap gap-2 mb-3">
-                {selectedSeats.map(seatNum => {
-                  // Find the seat in our map
-                  let seat = null;
-                  for (const row of seatMap) {
-                    if (Array.isArray(row)) {
-                      const foundSeat = row.find(s => s.seatNumber === seatNum);
-                      if (foundSeat) {
-                        seat = foundSeat;
-                        break;
-                      }
-                    }
-                  }
-
-                  const category = seat?.category || 'STANDARD';
-                  const price = seat?.price || 100;
-                  const categoryStyle = getCategoryStyle(category);
-
-                  return (
-                    <span key={seatNum} className={`badge ${categoryStyle.bgClass} ${categoryStyle.textClass} py-2 px-3`}>
-                      {seatNum} - ₹{price}
-                    </span>
-                  );
-                })}
-              </div>
-              <div className="d-flex justify-content-between align-items-center flex-wrap">
-                <div>
-                  <div className="text-muted small">Total Seats: {selectedSeats.length}</div>
-                  <div className="fw-bold fs-5">Total: ₹{getTotalPrice()}</div>
-                </div>
-                <button className="btn btn-primary mt-2 mt-md-0" onClick={handleCheckout()}>
-                  Continue to Checkout
-                </button>
-              </div>
-            </div>
-          ) : (
-            <p className="text-muted">No seats selected. Click on available seats to select them.</p>
-          )}
-        </div>
-      </div> */}
-
     </div>
   );
 };

@@ -24,6 +24,8 @@
     margin-top: 15px;
     border-bottom: 2px solid #ddd;
     padding-bottom: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 .date-btn {

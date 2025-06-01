@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "../api/axios";
 import { useParams } from 'react-router-dom';
-
+import { useAuth } from '../context/AuthContext';
 
 function EventPage() {
 
@@ -9,6 +9,7 @@ function EventPage() {
     const [event, setEvent] = useState({});
     const [loading, setLoading] = useState(true);
     const [ticketCount, setTicketCount] = useState(0);
+    const { user } = useAuth();
 
     useEffect(() => {
         axios.get(`http://localhost:8080/event/${id}`).then((res) => {
@@ -36,26 +37,64 @@ function EventPage() {
 
     // }
 
-    const handleSubmit = async () => {
-        if (!ticketCount || Number(ticketCount) <= 0) {
-            console.log("Enter a valid number of tickets");
-            return;
-        }
+
+
+    // const handleSubmit = async () => {
+    //     if (!ticketCount || Number(ticketCount) <= 0) {
+    //         console.log("Enter a valid number of tickets");
+    //         return;
+    //     }
     
-        const data = {
-            eventId: id,
-            ticketCount: Number(ticketCount),
-        };
+    //     const data = {
+    //         eventId: id,
+    //         ticketCount: Number(ticketCount),
+    //     };
     
-        try {
-            const response = await axios.post(`http://localhost:8080/event/book/${id}`, data);
-            console.log("Booking successful:", response.data);
+    //     try {
+    //         const response = await axios.post(`http://localhost:8080/event/book/${id}`, data);
+    //         console.log("Booking successful:", response.data);
+    //         window.location.reload();
+    //     } catch (error) {
+    //         console.error("Error booking event:", error.response?.data || error.message);
+    //     }
+    // };
+    
+
+    const handlePayment = async () => {
+        const res = await axios.post('http://localhost:8080/payment/create-order', {
+          amount: event.price * ticketCount,
+        });
+      console.log(res.data)
+        const options = {
+          key: "rzp_test_QpTQbcYP2DIhAx",
+          amount: res.data.amount,
+          currency: "INR",
+          name: "TicketVerse",
+          description: "Event Ticket Booking",
+          order_id: res.data.id,
+          handler: async function (response) {
+            // Send details to backend for verification + booking
+            await axios.post(`http://localhost:8080/event/book/${id}`, {
+              eventId: id,
+              ticketCount,
+              paymentId: response.razorpay_payment_id,
+              email: user.email, // assume you have user context
+            });
             window.location.reload();
-        } catch (error) {
-            console.error("Error booking event:", error.response?.data || error.message);
-        }
-    };
-    
+          },
+          prefill: {
+            name: user.name,
+            email: user.email,
+          },
+          theme: {
+            color: "#F37254",
+          },
+        };
+      
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      };
+      
 
 
     if (loading) return <div>Loading...</div>;
@@ -94,7 +133,7 @@ function EventPage() {
                         )} */}
 
                         {/* Submit Button */}
-                        <button type="submit" onClick={handleSubmit} className="btn btn-danger mt-3">
+                        <button type="submit" onClick={handlePayment} className="btn btn-danger mt-3">
                             Book
                         </button>
                     </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from '../api/axios';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import SeatSelection from './SeatMap';
+import { useAuth } from '../context/AuthContext';
 
 function ShowTimePage() {
 
@@ -9,6 +10,7 @@ function ShowTimePage() {
     // console.log(id);
     const [showtime, setShowtime] = useState({});
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const { user } = useAuth();
 
     useEffect(() => {
         const fetchShows = async () => {
@@ -18,7 +20,7 @@ function ShowTimePage() {
             }
             try {
                 const showtimeResponse = await axios.get(`/showtime/${id}`);
-                // console.log('showtime response :', showtimeResponse);
+                console.log('showtime response :', showtimeResponse);
                 setShowtime(showtimeResponse.data);
             } catch (error) {
                 console.error("Error fetching show details", error);
@@ -41,22 +43,6 @@ function ShowTimePage() {
         }
     };
 
-    // const getTotalPrice = () => {
-    //     let total = 0;
-    //     selectedSeats.forEach(seatNum => {
-    //         // Find the seat in our map
-    //         for (const row of seatMap) {
-    //             if (Array.isArray(row)) {
-    //                 const seat = row.find(s => s.seatNumber === seatNum);
-    //                 if (seat) {
-    //                     total += seat.price;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //     });
-    //     return total;
-    // };
     // Callback function to receive selected seats from SeatSelection
     const getTotalPrice = () => selectedSeats.reduce((total, seat) => total + seat.price, 0);
 
@@ -65,19 +51,49 @@ function ShowTimePage() {
         console.log("Selected Seats in Parent:", seats);
     };
 
-    const handleBooking = async () => {
+    const handleMoviePayment = async () => {
+
         if (selectedSeats.length === 0) {
             alert("Please select seats first!");
             return;
         }
         try {
-            await axios.post(`/showtime/book/${id}`, { seats: selectedSeats });
-            alert("Booking successful!");
-            window.location.reload();
+            const totalAmount = getTotalPrice();
+
+            console.log(totalAmount);
+
+            const res = await axios.post('http://localhost:8080/payment/create-order', {
+                amount: totalAmount,
+            });
+
+            const options = {
+                key: "rzp_test_QpTQbcYP2DIhAx",
+                amount: res.data.amount,
+                currency: "INR",
+                name: "TicketVerse",
+                description: "Movie Ticket Booking",
+                order_id: res.data.id,
+                handler: async function (response) {
+                    await axios.post(`/showtime/book/${id}`, { seats: selectedSeats, paymentId: response.razorpay_payment_id, email: user.email, });
+                    window.location.reload();
+                },
+                prefill: {
+                    name: user.name,
+                    email: user.email,
+                },
+                theme: {
+                    color: "#F37254",
+                },
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+
         } catch (error) {
             console.error("Error booking seats", error);
         }
     };
+
 
     if (showtime && showtime.theatreId) {
         return (
@@ -113,7 +129,7 @@ function ShowTimePage() {
                                         <div className="text-muted small">Total Seats: {selectedSeats.length}</div>
                                         <div className="fw-bold fs-5">Total: ₹{getTotalPrice()}</div>
                                     </div>
-                                    <button className="btn btn-primary mt-2 mt-md-0" onClick={handleBooking}>
+                                    <button className="btn btn-primary mt-2 mt-md-0" onClick={handleMoviePayment}>
                                         Continue to Checkout
                                     </button>
                                 </div>

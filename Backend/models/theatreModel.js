@@ -13,7 +13,7 @@ const theatreSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User' 
   },
-  // Define the theater layout that will be used as a template for showtimes
+  // Theater layout that will be used as a template for showtimes
   layout: {
     totalRows: { 
       type: Number, 
