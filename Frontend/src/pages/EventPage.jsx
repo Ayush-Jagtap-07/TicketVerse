@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from "../api/axios";
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function EventPage() {
@@ -10,6 +10,7 @@ function EventPage() {
   const [loading, setLoading] = useState(true);
   const [ticketCount, setTicketCount] = useState(0);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`/event/${id}`).then((res) => {
@@ -26,7 +27,8 @@ function EventPage() {
 
     if (user.isLoggedIn === false) {
             alert("Please login/signup first!");
-            return <Navigate to="/signup_login" />;
+            navigate("/signup_login");
+            return;
         }
 
     const res = await axios.post('/payment/create-order', {

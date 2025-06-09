@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from '../api/axios';
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import SeatSelection from './SeatMap';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,6 +11,7 @@ function ShowTimePage() {
     const [showtime, setShowtime] = useState({});
     const [selectedSeats, setSelectedSeats] = useState([]);
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchShows = async () => {
@@ -59,7 +60,8 @@ function ShowTimePage() {
         }
         if (user.isLoggedIn === false) {
             alert("Please login/signup first!");
-            return <Navigate to="/signup_login" />;
+            navigate("/signup_login");
+            return;
         }
         try {
             const totalAmount = getTotalPrice();
