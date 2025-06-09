@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
                     });
                     const decodedToken = jwtDecode(res.data.accessToken);
                     // console.log("Decoded refresh token :"+{decodedToken})
-                    // console.log(decodedToken)
+                    console.log(decodedToken)
                     setUser({
                         id: decodedToken.id,
                         role: decodedToken.role,
