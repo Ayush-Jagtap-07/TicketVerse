@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 
 // Creating a common Axios instance
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8080",            
+    baseURL: "https://ticket-verse-backend.vercel.app/api",            
     withCredentials: true,    
 });
 
