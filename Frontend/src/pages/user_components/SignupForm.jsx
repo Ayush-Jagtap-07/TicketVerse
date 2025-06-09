@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import axios from '../../api/axios';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 function SignUpForm() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const navigate = useNavigate();
 
     const onsubmit = async (data) => {
         try {
@@ -15,7 +18,9 @@ function SignUpForm() {
 
             if (response.status === 200) {
                 console.log(response.data);
+                const { user } = useAuth();
                 reset(); // Reset the form
+                navigate('/home');
             }else {
                 console.log(response.status);
             }

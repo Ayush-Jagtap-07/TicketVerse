@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import axios from '../../api/axios';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 function LoginForm() {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-
+    const navigate = useNavigate();
 
     const onsubmit = async (data) => {
         try {
@@ -24,7 +24,7 @@ function LoginForm() {
                 const { user } = useAuth();
                 console.log(user);
                 reset(); // Reset the form
-                <Navigate to='/home' />
+                navigate('/home');
 
             } else {
                 console.log(response.status);

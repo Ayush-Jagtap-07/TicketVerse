@@ -21,13 +21,32 @@ module.exports.signupUser = async (req, res) => {
         console.log('Registered user :');
         console.log(registeredUser);
 
+        // res.cookie('jwt', refreshToken, {
+        //     httpOnly: true,
+        //     // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+        //     // sameSite: 'strict',
+        //     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        // });
+        // res.cookie('token', accessToken, { maxAge: 15 * 60 * 1000 })
+
+        // Set refresh token in an HTTP-only cookie
         res.cookie('jwt', refreshToken, {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-            // sameSite: 'strict',
+            secure: true, // Use secure cookies in production
+            // sameSite: 'Strict',
+            sameSite: 'none',
+            path: "/",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
-        res.cookie('token', accessToken, { maxAge: 15 * 60 * 1000 })
+        res.cookie('token', accessToken, {
+            maxAge: 15 * 60 * 1000,
+            secure: true, // Use secure cookies in production
+            // sameSite: 'Strict',
+            sameSite: 'none',
+            path: "/",
+            httpOnly: false
+        })
+
         res.status(200).json({ message: 'User registered successfully', accessToken });
     } catch (error) {
         res.status(500).json({ message: 'Signup error', error: error.message });
