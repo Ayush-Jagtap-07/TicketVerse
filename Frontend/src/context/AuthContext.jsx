@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
             });
             setLoading(false);
         }
-    }, []);
+    }, [cookies.token]);
     // cookies.token
     // useEffect(() => {
     //     const fetchUser = async () => {
