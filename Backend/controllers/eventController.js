@@ -124,15 +124,15 @@ exports.bookTickets = async (req, res) => {
         await event.save();
 
         // Generate ticket folder
-        const ticketDir = path.join(__dirname, '..', 'tickets');
-        if (!fs.existsSync(ticketDir)) {
-            fs.mkdirSync(ticketDir);
-        }
+        // const ticketDir = path.join(__dirname, '..', 'tickets');
+        // if (!fs.existsSync(ticketDir)) {
+        //     fs.mkdirSync(ticketDir);
+        // }
 
-        const fileName = `ticket_${Date.now()}.pdf`;
-        const filePath = path.join(ticketDir, fileName);
+        // const fileName = `ticket_${Date.now()}.pdf`;
+        // const filePath = path.join(ticketDir, fileName);
 
-        console.log("About to generate PDF at:", filePath);
+        // console.log("About to generate PDF at:", filePath);
 
         // Generate ticket PDF
         // await generateTicketPDF({

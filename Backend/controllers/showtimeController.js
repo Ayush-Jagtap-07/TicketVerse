@@ -68,11 +68,11 @@ module.exports.bookShowTickets = async (req, res) => {
     }, 0);
 
     // Generate PDF path
-    const ticketDir = path.join(__dirname, '..', 'tickets');
-    if (!fs.existsSync(ticketDir)) fs.mkdirSync(ticketDir);
+    // const ticketDir = path.join(__dirname, '..', 'tickets');
+    // if (!fs.existsSync(ticketDir)) fs.mkdirSync(ticketDir);
 
-    const fileName = `ticket_${Date.now()}.pdf`;
-    const filePath = path.join(ticketDir, fileName);
+    // const fileName = `ticket_${Date.now()}.pdf`;
+    // const filePath = path.join(ticketDir, fileName);
 
     // Generate PDF
     // await generateTicketPDF({
