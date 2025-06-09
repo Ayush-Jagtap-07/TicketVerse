@@ -90,7 +90,9 @@ export const AuthProvider = ({ children }) => {
     //     fetchUser();
     // }, [cookies.token]); 
 
-
+    if (loading) {
+        return <div>Loading...</div>; // Or your loading component
+    }
 
     return (
         <AuthContext.Provider value={{ user, loading }}>
