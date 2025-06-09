@@ -57,6 +57,10 @@ function ShowTimePage() {
             alert("Please select seats first!");
             return;
         }
+        if (user.isLoggedIn === false) {
+            alert("Please login/signup first!");
+            return <Navigate to="/signup_login" />;
+        }
         try {
             const totalAmount = getTotalPrice();
 
