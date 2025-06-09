@@ -6,7 +6,7 @@ function About() {
         <div className="container mt-4 mb-5">
 
             <div className="text-center mb-4">
-                <img src="images/logo.png" alt="Company Logo" className="img-fluid" style={{ maxWidth: '300px' }} />
+                <img src="https://res.cloudinary.com/dxzcugmwi/image/upload/v1749483770/logo_blchg6.png" alt="Company Logo" className="img-fluid" style={{ maxWidth: '300px' }} />
                 <h1 className="display-1 mt-3"><strong>TicketVerse</strong></h1> 
             </div>
 
