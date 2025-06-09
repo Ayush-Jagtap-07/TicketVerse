@@ -3,6 +3,7 @@ import axios from '../../api/axios';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { Navigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 function LoginForm() {
 
@@ -20,8 +21,10 @@ function LoginForm() {
             if (response.status === 200) {
                 // Store the access token in a normal cookie (expires in 1 hour as an example)
                 console.log(response.data);
+                const { user } = useAuth();
+                console.log(user);
                 reset(); // Reset the form
-                <Navigate to='/' />
+                <Navigate to='/home' />
 
             } else {
                 console.log(response.status);
