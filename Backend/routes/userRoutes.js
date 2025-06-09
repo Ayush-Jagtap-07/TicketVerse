@@ -14,4 +14,9 @@ router.get('/refresh-token', userController.getRefreshToken );
 // Logout
 router.post('/logout', userController.logoutUser );
 
+router.get('/all-users', userController.getAllUsers);
+
+router.delete('/delete/:id', userController.deleteUser);
+
+
 module.exports = router;

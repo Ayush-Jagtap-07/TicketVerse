@@ -269,10 +269,10 @@ const sampleTheatreData0 = [
 
 const sampleEventData = [
     {
-        name: "Tech Conference 2024",
+        name: "Tech Conference 2025",
         category: "Technology",
         description: "An annual tech conference featuring the latest advancements in AI, blockchain, and software development.",
-        date: new Date("2024-05-20"),
+        date: new Date("2025-06-20"),
         time: "10:00 AM",
         venue: {
             name: "TechWorld Convention Center",
@@ -284,10 +284,10 @@ const sampleEventData = [
         posterUrl: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/futuristic-tech-conference-poster-design-template-6cc742c91ddf28f6a2405fcf4d537c2b_screen.jpg?ts=1716075044"
     },
     {
-        name: "Music Fest 2024",
+        name: "Music Fest 2025",
         category: "Music",
         description: "A live music festival with performances by top bands and artists from around the globe.",
-        date: new Date("2024-07-15"),
+        date: new Date("2025-07-15"),
         time: "5:00 PM",
         venue: {
             name: "Open Air Stage",
@@ -299,10 +299,10 @@ const sampleEventData = [
         posterUrl: "https://img.freepik.com/free-vector/abstract-music-festival-poster-template_23-2148233165.jpg"
     },
     {
-        name: "Art Expo 2024",
+        name: "Art Expo 2025",
         category: "Exhibition",
         description: "A grand exhibition showcasing contemporary and traditional art from renowned artists.",
-        date: new Date("2024-09-10"),
+        date: new Date("2025-07-10"),
         time: "9:00 AM",
         venue: {
             name: "The Louvre",
@@ -314,10 +314,10 @@ const sampleEventData = [
         posterUrl: "https://marketplace.canva.com/EAGQbgp-Niw/2/0/1131w/canva-colorful-brown-creative-illustrative-art-exhibition-poster-V2ynAh_dBJo.jpg"
     },
     {
-        name: "Startup Meetup 2024",
+        name: "Startup Meetup 2025",
         category: "Business",
         description: "A networking event for entrepreneurs and investors to discuss innovative business ideas.",
-        date: new Date("2024-03-12"),
+        date: new Date("2025-06-16"),
         time: "3:00 PM",
         venue: {
             name: "Startup Hub",
@@ -332,7 +332,7 @@ const sampleEventData = [
         name: "Fitness Marathon",
         category: "Sports",
         description: "A day-long fitness marathon featuring yoga, aerobics, and health workshops.",
-        date: new Date("2024-06-25"),
+        date: new Date("2025-06-25"),
         time: "6:00 AM",
         venue: {
             name: "Beachside Arena",
@@ -449,46 +449,223 @@ const sampleTheatreData = [
 // ];
 const mongoose = require("mongoose");
 
-const sampleShowtimeData = [
-    {
-        movieId: "677c0d24239f3cab3ad4c7b5",
-        theatreId: "67b5fb67163f05484f40fff9",
-        date: new Date("2025-03-04"),
-        time: "10:00 AM",
-        basePrice: 200
-    },
-    {
-        movieId: "677c0d24239f3cab3ad4c7b6",
-        theatreId: "67b5fb68163f05484f40ffff",
-        date: new Date("2025-03-04"),
-        time: "1:30 PM",
-        basePrice: 250
-    },
-    {
-        movieId: "677c0d24239f3cab3ad4c7b7",
-        theatreId: "67b5fb68163f05484f410005",
-        date: new Date("2025-03-04"),
-        time: "4:00 PM",
-        basePrice: 220
-    },
-    {
-        movieId: "677c0d24239f3cab3ad4c7b8",
-        theatreId: "67b5fb68163f05484f41000b",
-        date: new Date("2025-03-04"),
-        time: "7:00 PM",
-        basePrice: 300
-    },
-    {
-        movieId: "677c0d24239f3cab3ad4c7b9",
-        theatreId: "67b5fb68163f05484f410011",
-        date: new Date("2025-03-04"),
-        time: "9:30 PM",
-        basePrice: 280
-    }
-    // More entries for different dates and times
-];
+// const sampleShowtimeData = [
+//     {
+//         movieId: "677c0d24239f3cab3ad4c7b5",
+//         theatreId: "67b5fb67163f05484f40fff9",
+//         date: new Date("2025-03-04"),
+//         time: "10:00 AM",
+//         basePrice: 200
+//     },
+//     {
+//         movieId: "677c0d24239f3cab3ad4c7b6",
+//         theatreId: "67b5fb68163f05484f40ffff",
+//         date: new Date("2025-03-04"),
+//         time: "1:30 PM",
+//         basePrice: 250
+//     },
+//     {
+//         movieId: "677c0d24239f3cab3ad4c7b7",
+//         theatreId: "67b5fb68163f05484f410005",
+//         date: new Date("2025-03-04"),
+//         time: "4:00 PM",
+//         basePrice: 220
+//     },
+//     {
+//         movieId: "677c0d24239f3cab3ad4c7b8",
+//         theatreId: "67b5fb68163f05484f41000b",
+//         date: new Date("2025-03-04"),
+//         time: "7:00 PM",
+//         basePrice: 300
+//     },
+//     {
+//         movieId: "677c0d24239f3cab3ad4c7b9",
+//         theatreId: "67b5fb68163f05484f410011",
+//         date: new Date("2025-03-04"),
+//         time: "9:30 PM",
+//         basePrice: 280
+//     }
+//     // More entries for different dates and times
+// ];
 
 // Generate additional 35 entries with variations in dates, times, and prices
-
+const sampleShowtimeData = [
+    
+  {
+    movieId: "6845cc41e43295ebab53ff15",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-10"),
+    time: "11:00",
+    basePrice: 220
+  },
+  {
+    movieId: "6845cc9de43295ebab53ff17",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-10"),
+    time: "14:00",
+    basePrice: 250
+  },
+  {
+    movieId: "6845ccd4e43295ebab53ff19",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-10"),
+    time: "17:00",
+    basePrice: 200
+  },
+  {
+    movieId: "6845cd15e43295ebab53ff1b",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-10"),
+    time: "20:00",
+    basePrice: 230
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b5",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-11"),
+    time: "11:00",
+    basePrice: 220
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b7",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-11"),
+    time: "14:00",
+    basePrice: 260
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b8",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-11"),
+    time: "17:00",
+    basePrice: 210
+  },
+  {
+    movieId: "6845cc9de43295ebab53ff17",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-11"),
+    time: "20:00",
+    basePrice: 240
+  },
+  {
+    movieId: "6845ccd4e43295ebab53ff19",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-12"),
+    time: "11:00",
+    basePrice: 230
+  },
+  {
+    movieId: "6845cd15e43295ebab53ff1b",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-12"),
+    time: "14:00",
+    basePrice: 220
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b5",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-12"),
+    time: "17:00",
+    basePrice: 250
+  },
+  {
+    movieId: "6845cc41e43295ebab53ff15",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-12"),
+    time: "20:00",
+    basePrice: 240
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b7",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-11"),
+    time: "11:00",
+    basePrice: 215
+  },
+  {
+    movieId: "6845cc9de43295ebab53ff17",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-12"),
+    time: "14:00",
+    basePrice: 255
+  },
+  {
+    movieId: "6845cd15e43295ebab53ff1b",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-10"),
+    time: "17:00",
+    basePrice: 225
+  },
+  {
+    movieId: "6845ccd4e43295ebab53ff19",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-10"),
+    time: "14:00",
+    basePrice: 235
+  },
+  {
+    movieId: "6845cc41e43295ebab53ff15",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-11"),
+    time: "14:00",
+    basePrice: 245
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b8",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-12"),
+    time: "11:00",
+    basePrice: 225
+  },
+  {
+    movieId: "6845cc9de43295ebab53ff17",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-10"),
+    time: "17:00",
+    basePrice: 215
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b5",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-10"),
+    time: "11:00",
+    basePrice: 240
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b7",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-12"),
+    time: "20:00",
+    basePrice: 260
+  },
+  {
+    movieId: "6845cd15e43295ebab53ff1b",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-11"),
+    time: "17:00",
+    basePrice: 220
+  },
+  {
+    movieId: "6845cc41e43295ebab53ff15",
+    theatreId: "67b5fb67163f05484f40fff2",
+    date: new Date("2025-06-12"),
+    time: "11:00",
+    basePrice: 210
+  },
+  {
+    movieId: "677c0d24239f3cab3ad4c7b8",
+    theatreId: "67b5fb67163f05484f40fff4",
+    date: new Date("2025-06-11"),
+    time: "20:00",
+    basePrice: 250
+  },
+  {
+    movieId: "6845ccd4e43295ebab53ff19",
+    theatreId: "67b5fb68163f05484f410011",
+    date: new Date("2025-06-10"),
+    time: "20:00",
+    basePrice: 230
+  }
+]
 
 module.exports = { sampleEventData, sampleMovieData, sampleTheatreData, sampleShowtimeData };

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import axios from '../../../api/axios';
@@ -7,7 +6,7 @@ import axios from '../../../api/axios';
 function EditMoviePage() {
     const { id } = useParams(); // Get movie ID from the URL
     // console.log(id);
-    const { register, handleSubmit, formState: { errors }, reset} = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [message, setMessage] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -15,7 +14,7 @@ function EditMoviePage() {
     useEffect(() => {
         const fetchMovieData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/movie/${id}`);
+                const response = await axios.get(`/movie/${id}`);
                 const movieData = response.data;
 
                 // Format the release date
@@ -47,7 +46,7 @@ function EditMoviePage() {
 
         try {
             const response = await axios.put(
-                `http://localhost:8080/movie/edit/${id}`,
+                `/movie/edit/${id}`,
                 data
             );
 

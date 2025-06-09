@@ -2,6 +2,7 @@ const Movie = require("../models/movieModel");
 const Event = require("../models/eventModel");
 const Theatre = require("../models/theatreModel");
 const User = require("../models/userModel");
+const Booking = require("../models/bookingModel");
 
 // Get all movies and events for home page
 module.exports.getHomeData = async (req, res) => {
@@ -19,14 +20,15 @@ module.exports.getHomeData = async (req, res) => {
 // Get dashboard statistics
 module.exports.getDashboardStats = async (req, res) => {
     try {
-        const [movieCount, eventCount, theatreCount, userCount] = await Promise.all([
+        const [movieCount, eventCount, theatreCount, userCount, bookingCount] = await Promise.all([
             Movie.countDocuments({}),
             Event.countDocuments({}),
             Theatre.countDocuments({}),
-            User.countDocuments({})
+            User.countDocuments({}),
+            Booking.countDocuments({})
         ]);
 
-        res.json({ movieCount, eventCount, theatreCount, userCount });
+        res.json({ movieCount, eventCount, theatreCount, userCount, bookingCount });
     } catch (error) {
         console.error("Error fetching dashboard stats:", error);
         res.status(500).json({ message: "Failed to fetch dashboard statistics." });

@@ -1,5 +1,6 @@
 const Movie = require("../models/movieModel");
 const Theatre = require("../models/theatreModel");
+const ExpressError = require("../utils/ExpressError");
 
 module.exports.getAllMovieIds = async (req, res) => {
     const allMovies = await Movie.find({});
@@ -34,16 +35,31 @@ module.exports.getMovieDetails = async (req, res) => {
         //     name: 1,
         //     address: 1,
         //     "movies.$": 1 // Fetching only the specific movie's showtimes in the theaters
-    // }
+        // }
+
+
         // Formatting response
+        // const response = {
+        //     ...movie.toObject(),
+        //     theaters: theaters.map(theater => ({
+        //         id: theater._id,
+        //         name: theater.name,
+        //         address: theater.address,
+        //         showtimes: theater.movies[0].showtimes
+        //     }))
+        // };
+
         const response = {
             ...movie.toObject(),
-            theaters: theaters.map(theater => ({
-                id: theater._id,
-                name: theater.name,
-                address: theater.address,
-                showtimes: theater.movies[0].showtimes
-            }))
+            theaters: theaters.map(theater => {
+                const movieInfo = theater.movies.find(m => m.movieId.toString() === id);
+                return {
+                    id: theater._id,
+                    name: theater.name,
+                    address: theater.address,
+                    showtimes: movieInfo?.showtimes || []
+                };
+            })
         };
 
         res.json(response);
@@ -59,6 +75,18 @@ module.exports.addNewMovie = async (req, res) => {
         if (!req.body.title || !req.body.cast) {
             throw new ExpressError(400, "Send valid data!");
         }
+        // Ensure poster is uploaded
+        if (!req.file || !req.file.path) {
+            throw new ExpressError(400, "Poster image is required.");
+        }
+
+        const { title, genre, description, releaseDate, duration, language, director } = req.body;
+
+        // Handle poster file (uploaded via multer)
+        let posterUrl = "";
+        if (req.file && req.file.path) {
+            posterUrl = req.file.path; // Cloudinary URL or local path
+        }
 
         // Parse the cast string into an array
         const castString = req.body.cast;
@@ -66,8 +94,15 @@ module.exports.addNewMovie = async (req, res) => {
 
         // Construct the movie object
         const newMovieData = {
-            ...req.body,
-            cast: castArray, // Replace cast string with array
+            title,
+            genre,
+            description,
+            releaseDate,
+            duration,
+            language,
+            director,
+            cast: castArray,
+            posterUrl
         };
 
         // Save the new movie to the database

@@ -62,7 +62,7 @@ function ShowTimePage() {
 
             console.log(totalAmount);
 
-            const res = await axios.post('http://localhost:8080/payment/create-order', {
+            const res = await axios.post('/payment/create-order', {
                 amount: totalAmount,
             });
 

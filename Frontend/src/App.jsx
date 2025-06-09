@@ -29,6 +29,10 @@ import AddTheatrePage from './pages/dashboard/theatres/AddTheatrePage';
 import EditTheatrePage from './pages/dashboard/theatres/EditTheatrePage';
 import AddShowTimesPage from './pages/dashboard/theatres/AddShowTimesPage';
 
+import BookingDetailsPage from './pages/dashboard/bookings/BookingDetailsPage';
+
+import AdminUserPage from './pages/dashboard/users/AdminUserPage';
+
 import AuthContainer from './pages/user_components/AuthContainer';
 
 import Unauthorized from './components/Unauthorized';
@@ -81,6 +85,12 @@ function App() {
               <Route path="theatres/add" element={<AddTheatrePage />} />
               <Route path="theatres/edit/:id" element={<EditTheatrePage />} />
               <Route path="theatres/addShowTimes/:id" element={<AddShowTimesPage />} />
+
+              {/* Bookings Routes */}
+              <Route path="bookings" element={<BookingDetailsPage />} />
+
+              {/* Users Routes */}
+              <Route path="users" element={<AdminUserPage />} />
             </Route>
 
 

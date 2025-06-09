@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from "../../../api/axios";
 import { useForm } from 'react-hook-form';
 
 
@@ -11,10 +11,22 @@ function AddMoviePage() {
     const onSubmit = async (data) => {
         window.scrollTo(0, 0);
 
+        const formData = new FormData();
+        formData.append('title', data.title);
+        formData.append('genre', data.genre);
+        formData.append('description', data.description);
+        formData.append('releaseDate', data.releaseDate);
+        formData.append('duration', data.duration);
+        formData.append('language', data.language);
+        formData.append('director', data.director);
+        formData.append('rating', data.rating);
+        formData.append('cast', data.cast);
+        formData.append('poster', data.poster[0]);
+
         try {
             const response = await axios.post(
-                'http://localhost:8080/movie/add',
-                data
+                '/movie/add',
+                formData
             );
 
             if (response.status === 200) {
@@ -41,7 +53,7 @@ function AddMoviePage() {
                 <h2 className={isSuccess ? 'text-success text-center' : 'text-danger'}>{message}</h2>
             )}
             <h2 className="mb-3">Add New Movie</h2>
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data' noValidate>
                 {/* Title */}
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
@@ -57,18 +69,18 @@ function AddMoviePage() {
                     )}
                 </div>
 
-                {/* Poster URL */}
+                {/* Poster */}
                 <div className="mb-3">
-                    <label htmlFor="posterUrl" className="form-label">Poster URL</label>
+                    <label htmlFor="poster" className="form-label">Upload Poster</label>
                     <input
-                        type="text"
-                        id="posterUrl"
-                        {...register('posterUrl', { required: 'Poster URL is required' })}
-                        placeholder="Enter movie poster URL"
-                        className={`form-control ${errors.posterUrl ? 'is-invalid' : ''}`}
+                        type="file"
+                        id="poster"
+                        {...register('poster', { required: 'Poster is required' })}
+                        placeholder="Upload movie poster"
+                        className={`form-control ${errors.poster ? 'is-invalid' : ''}`}
                     />
-                    {errors.posterUrl && (
-                        <div className="invalid-feedback">{errors.posterUrl.message}</div>
+                    {errors.poster && (
+                        <div className="invalid-feedback">{errors.poster.message}</div>
                     )}
                 </div>
 

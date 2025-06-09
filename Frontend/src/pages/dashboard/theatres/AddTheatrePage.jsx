@@ -1,82 +1,6 @@
-// import React, {useState} from "react";
-// import { useForm } from "react-hook-form";
-// import axios from "axios";
-
-// function AddTheatrePage() {
-//     const { register, handleSubmit, reset, formState: { errors } } = useForm();
-//     const [message, setMessage] = useState('');
-//     const [isSuccess, setIsSuccess] = useState(false);
-
-//     const onSubmit = async (data) => {
-//         window.scrollTo(0, 0);
-//         try {
-//             const response = await axios.post("http://localhost:8080/theatre/add", data);
-//             // alert("Theatre added successfully!");
-//             if (response.status === 200) {
-//                 setMessage('Theatre added successfully!');
-//                 setIsSuccess(true);
-//                 reset(); // Reset the form
-//             }
-//         } catch (error) {
-//             if (error.response) {
-//                 setMessage(
-//                     `Error: ${error.response.data.error || 'Failed to add theatre'}`
-//                 );
-//             } else {
-//                 setMessage(`Error: ${error.message}`);
-//             }
-//             setIsSuccess(false);
-//         }
-//     };
-
-//     return (
-//         <div className="container">
-
-//             {message && (
-//                 <h2 className={isSuccess ? 'text-success text-center' : 'text-danger'}>{message}</h2>
-//             )}
-
-//             <h2>Add Theatre</h2>
-//             <form onSubmit={handleSubmit(onSubmit)} noValidate>
-
-//                 {/* Theatre Name */}
-//                 <div className="mb-3" >
-//                     <label htmlFor="name" className="form-label" >Theatre Name:</label>
-//                     <input
-//                         type="text"
-//                         id="name"
-//                         {...register("name", { required: "Theatre name is required" })}
-//                         placeholder="Enter movie title"
-//                         className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-//                     />
-//                     {errors.name && <p>{errors.name.message}</p>}
-//                 </div>
-
-//                 {/* Address */}
-//                 <div className="mb-3" >
-//                     <label htmlFor="address" className="form-label" >Address:</label>
-//                     <input
-//                         type="text"
-//                         id="address"
-//                         {...register("address", { required: "Address is required" })}
-//                         placeholder="Enter movie title"
-//                         className={`form-control ${errors.address ? 'is-invalid' : ''}`}
-//                     />
-//                     {errors.location && <p>{errors.address.message}</p>}
-//                 </div>
-                
-//                 <button type="submit" className="btn btn-danger" >Add Theatre</button>
-//             </form>
-//         </div>
-//     );
-// }
-
-// export default AddTheatrePage;
-
-
 import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import axios from "axios";
+import axios from "../../../api/axios";
 
 function AddTheatrePage() {
     const { register, handleSubmit, reset, control, formState: { errors } } = useForm();
@@ -87,7 +11,7 @@ function AddTheatrePage() {
     const onSubmit = async (data) => {
         window.scrollTo(0, 0);
         try {
-            const response = await axios.post("http://localhost:8080/theatre/add", data);
+            const response = await axios.post("/theatre/add", data);
             if (response.status === 200) {
                 setMessage('Theatre added successfully!');
                 setIsSuccess(true);

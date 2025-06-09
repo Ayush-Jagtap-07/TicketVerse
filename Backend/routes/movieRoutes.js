@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { verifyJWT, authorizeRoles } = require('../middleware/auth');
 const movieController = require("../controllers/movieController");
+const multer = require("multer");
+const { storage } = require("../cloudConfig");
+const upload = multer({ storage });
 
 // Endpoint to retrieve all movie IDs
 router.get("/movie-ids", movieController.getAllMovieIds );
@@ -13,7 +16,7 @@ router.get("/all-movies", movieController.getAllMovies );
 router.get("/:id", verifyJWT, movieController.getMovieDetails );
 
 // Endpoint to add a new movie to the dashboard
-router.post("/add", movieController.addNewMovie );
+router.post("/add", upload.single('poster'), movieController.addNewMovie );
 
 // Endpoint to update a movie from the dashboard by movie ID
 router.put("/edit/:id", movieController.editMovie );

@@ -12,7 +12,7 @@ function AdminDashboard() {
     const location = useLocation();
 
     // Check if we are on a nested route (edit/addShowTimes)
-    const isNestedRoute = location.pathname.includes("movies") || location.pathname.includes("events") || location.pathname.includes("theatres");
+    const isNestedRoute = location.pathname.includes("movies") || location.pathname.includes("events") || location.pathname.includes("theatres") || location.pathname.includes("users") || location.pathname.includes("bookings");
 
     useEffect(() => {
         async function fetchData() {
@@ -24,13 +24,7 @@ function AdminDashboard() {
             }
         }
         fetchData();
-    },[]);
-
-    // useEffect(() => {
-    //     axios.get("http://localhost:8080/dashboard").then((res) => {
-    //         setCount(res.data);
-    //     })
-    // }, [])
+    }, []);
 
     const managementEntities = [
         {
@@ -59,7 +53,7 @@ function AdminDashboard() {
         },
         {
             title: 'Bookings',
-            totalEntries: 25,
+            totalEntries: count.bookingCount,
             rating: '9.0',
             link: '/dashboard/bookings'
         }

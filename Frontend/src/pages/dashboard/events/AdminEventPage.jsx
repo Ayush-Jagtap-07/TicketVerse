@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
+import axios from "../../../api/axios";
 import { Link } from "react-router-dom";
 
 function AdminEventPage() {
@@ -10,7 +10,7 @@ function AdminEventPage() {
 
     // Fetching all events from the backend database
     useEffect(() => {
-        axios.get("http://localhost:8080/event/all-events").then((res) => {
+        axios.get("/event/all-events").then((res) => {
             setEvents(res.data);
         })
     }, []);
@@ -27,7 +27,7 @@ function AdminEventPage() {
     const handleDelete = async (id) => {
         try {
             // Sending delete request to backend server
-            await axios.delete(`http://localhost:8080/event/delete/${id}`);
+            await axios.delete(`/event/delete/${id}`);
 
             // Removing deleted event from existing events array
             setEvents(events.filter(event => event._id !== id));

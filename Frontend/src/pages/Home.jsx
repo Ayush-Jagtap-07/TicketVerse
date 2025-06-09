@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
+import axios from "../api/axios";
 import { Link } from "react-router-dom";
 
 function Home() {
@@ -9,7 +9,7 @@ function Home() {
 
     // Fetching movies and events data
     useEffect(() => {
-        axios.get("http://localhost:8080/home").then((res) => {
+        axios.get("/home").then((res) => {
             setMovies(res.data.movies);
             setEvents(res.data.events);
         })
@@ -54,7 +54,7 @@ function Home() {
                                     <h5 className="card-title">{movie.title}</h5>
                                     <p className="card-text">
                                         <strong>Genre:</strong> {movie.genre}<br />
-                                        <strong>Rating:</strong> {movie.rating}<br />
+                                        {/*<strong>Rating:</strong> {movie.rating}<br />*/}
                                     </p>
                                     <Link to={`/movie/${movie._id}`} className="btn btn-primary">Book Now</Link>
                                 </div>

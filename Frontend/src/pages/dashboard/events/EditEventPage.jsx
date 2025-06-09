@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../../api/axios';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
@@ -47,7 +47,7 @@ function EditEventPage() {
 
         try {
             const response = await axios.put(
-                `http://localhost:8080/event/edit/${id}`,
+                `/event/edit/${id}`,
                 data
             );
 

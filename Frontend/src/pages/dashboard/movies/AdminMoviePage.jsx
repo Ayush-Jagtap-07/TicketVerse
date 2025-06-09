@@ -11,7 +11,7 @@ function AdminMoviePage() {
 
     // Fetching all movies from the backend database
     useEffect(() => {
-        axios.get("http://localhost:8080/movie/all-movies").then((res) => {
+        axios.get("/movie/all-movies").then((res) => {
             setMovies(res.data);
         })
     }, []);
@@ -27,7 +27,7 @@ function AdminMoviePage() {
     const handleDelete = async (id) => {
         try {
             // Sending delete request to backend server
-            await axios.delete(`http://localhost:8080/movie/delete/${id}`);
+            await axios.delete(`/movie/delete/${id}`);
 
             // Removing deleted movie from existing movies array
             setMovies(movies.filter(movie => movie._id !== id));

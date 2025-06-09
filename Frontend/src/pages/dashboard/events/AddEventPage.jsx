@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from "../../../api/axios";
 import { useForm } from 'react-hook-form';
 
 function AddEventPage() {
@@ -9,11 +9,25 @@ function AddEventPage() {
 
     const onSubmit = async (data) => {
         window.scrollTo(0, 0);
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('category', data.category);
+        formData.append('description', data.description);
+        formData.append('date', data.date);
+        formData.append('time', data.time);
+        formData.append('organizer', data.organizer);
+        formData.append('ticketsAvailable', data.ticketsAvailable);
+        formData.append('price', data.price);
+        formData.append('poster', data.poster[0]);
+
+        // Manually flatten the nested venue object
+        formData.append('venueName', data.venue.name);
+        formData.append('venueAddress', data.venue.address);
 
         try {
             const response = await axios.post(
-                'http://localhost:8080/event/add',
-                data
+                '/event/add',
+                formData
             );
 
             if (response.status === 200) {
@@ -39,7 +53,7 @@ function AddEventPage() {
                 <h2 className={isSuccess ? 'text-success text-center' : 'text-danger'}>{message}</h2>
             )}
             <h2 className="mb-3">Add New Event</h2>
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data' noValidate>
                 {/* Event Name */}
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Event Name</label>
@@ -48,25 +62,25 @@ function AddEventPage() {
                         id="name"
                         {...register('name', { required: 'Event name is required' })}
                         placeholder="Enter event name"
-                        className={`form-control ${errors.eventName ? 'is-invalid' : ''}`}
+                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                     />
                     {errors.name && (
                         <div className="invalid-feedback">{errors.name.message}</div>
                     )}
                 </div>
 
-                {/* Event Poster URL */}
+                {/* Event Poster */}
                 <div className="mb-3">
-                    <label htmlFor="posterUrl" className="form-label">Poster URL</label>
+                    <label htmlFor="poster" className="form-label">Poster</label>
                     <input
-                        type="text"
-                        id="posterUrl"
-                        {...register('posterUrl', { required: 'Poster URL is required' })}
-                        placeholder="Enter event poster URL"
-                        className={`form-control ${errors.posterUrl ? 'is-invalid' : ''}`}
+                        type="file"
+                        id="poster"
+                        {...register('poster', { required: 'Poster is required' })}
+                        placeholder="Upload event poster"
+                        className={`form-control ${errors.poster ? 'is-invalid' : ''}`}
                     />
-                    {errors.posterUrl && (
-                        <div className="invalid-feedback">{errors.posterUrl.message}</div>
+                    {errors.poster && (
+                        <div className="invalid-feedback">{errors.poster.message}</div>
                     )}
                 </div>
 

@@ -39,35 +39,17 @@ function MoviePage() {
                         <p><strong>Language: </strong> {movie.language}</p>
                         <p><strong>Director: </strong> {movie.director}</p>
                         <p><strong>Cast: </strong> {movie.cast.join(', ')}</p>
-                        <p><strong>Rating: </strong> {movie.rating} / 10</p>
+                        {/* <p><strong>Rating: </strong> {movie.rating} / 10</p> */}
 
-                        <h4 className="mt-4">Showtimes</h4>
-                        <h4 className="mt-4">Showtimes</h4>
+                        <h4 className="mt-4">Shows</h4>
 
                         {movie.theaters && movie.theaters.length > 0 ? (
-            
+
                             movie.theaters.map((theater, theaterIndex) => (
-                                
+
                                 <div key={theaterIndex} className="mb-4">
                                     <Link to={`/theatre/${theater.id}`} ><h5>{theater.name}</h5></Link>
                                     <p><strong>Location: </strong> {theater.address}</p>
-                                    {/* {theater.showtimes && theater.showtimes.length > 0 ? (
-                                        theater.showtimes.map((showtime, showtimeIndex) => (
-                                            <div key={showtimeIndex} className="mb-3">
-                                                <h6>{new Date(showtime.date).toLocaleDateString()}</h6>
-                                                <ul className="list-group">
-                                                    {showtime.times.map((time, timeIndex) => (
-                                                        <li key={timeIndex} className="list-group-item bg d-flex justify-content-between align-items-center">
-                                                            {time.time}
-                                                            <span className="badge bg-primary rounded-pill">{time.ticketsAvailable} Tickets - &#8377; {time.price.toFixed(2)}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p>No showtimes available.</p>
-                                    )} */}
                                 </div>
                             ))
                         ) : (

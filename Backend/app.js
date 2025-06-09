@@ -1,10 +1,14 @@
+if(process.env.NODE_ENV != "production"){
+    require('dotenv').config();
+}
+
 const express = require("express");
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
-require('dotenv').config();
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
@@ -15,6 +19,7 @@ const showtimeRouter = require("./routes/showtimeRoutes");
 const userRouter = require("./routes/userRoutes");
 const generalRouter = require("./routes/generalRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
+const bookingRouter = require("./routes/bookingRoutes");
 
 const User = require('./models/userModel');
 const ShowTime = require('./models/showTimeModel');
@@ -41,7 +46,7 @@ app.use(cookieParser());
 // Function to connect to MongoDB database
 async function main() {
     // Establish connection to the MongoDB database
-    await mongoose.connect(process.env.MONGO_URL);
+    await mongoose.connect(process.env.ATLASDB_URL);
 }
 
 main().then(() => {
@@ -88,8 +93,13 @@ app.use("/", userRouter);
 app.use("/showtime", showtimeRouter);
 
 
+// -------------------- Payment APIs --------------------
 
 app.use('/payment', paymentRouter);
+
+// -------------------- Booking APIs --------------------
+
+app.use('/booking', bookingRouter);
 
 // app.get('/showtime/:id', async (req, res) => {
 //     try {

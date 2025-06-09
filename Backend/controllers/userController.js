@@ -27,7 +27,7 @@ module.exports.signupUser = async (req, res) => {
             // sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
-        res.cookie('token', accessToken, {maxAge: 15 * 60 * 1000})
+        res.cookie('token', accessToken, { maxAge: 15 * 60 * 1000 })
         res.status(200).json({ message: 'User registered successfully', accessToken });
     } catch (error) {
         res.status(500).json({ message: 'Signup error', error: error.message });
@@ -50,7 +50,7 @@ module.exports.loginUser = (req, res, next) => {
                 //sameSite: 'strict',
                 maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             });
-            res.cookie('token', accessToken, {maxAge: 1 * 60 * 1000})
+            res.cookie('token', accessToken, { maxAge: 1 * 60 * 1000 })
 
             // Send access token to the client
             res.status(200).json({
@@ -95,10 +95,31 @@ module.exports.logoutUser = async (req, res) => {
         if (!refreshToken) return res.status(401).json({ message: 'Refresh token required' });
 
         res.clearCookie("token");
-        res.clearCookie("jwt", {httpOnly:true});
+        res.clearCookie("jwt", { httpOnly: true });
 
         res.json({ message: 'Logout successful' });
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
     }
 }
+
+module.exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, 'username email role');
+        res.json(users);
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({ message: 'Server error while fetching users' });
+    }
+};
+
+module.exports.deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await User.findByIdAndDelete(id);
+        res.json({ success: true, message: 'User deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        res.status(500).json({ message: 'Server error while deleting user' });
+    }
+};

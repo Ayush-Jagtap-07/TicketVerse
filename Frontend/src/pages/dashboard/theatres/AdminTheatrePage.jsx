@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
+import axios from "../../../api/axios";
 import { Link } from "react-router-dom";
 
 function AdminTheatrePage() {
@@ -10,7 +10,7 @@ function AdminTheatrePage() {
 
     // Fetching all theatres from the backend database
     useEffect(() => {
-        axios.get("http://localhost:8080/theatre/all-theatres").then((res) => {
+        axios.get("/theatre/all-theatres").then((res) => {
             setTheatres(res.data);
         }).catch((err) => {
             console.error("Error fetching theatres:", err.message);
@@ -28,7 +28,7 @@ function AdminTheatrePage() {
     const handleDelete = async (id) => {
         try {
             // Sending delete request to backend server
-            await axios.delete(`http://localhost:8080/theatre/delete/${id}`);
+            await axios.delete(`/theatre/delete/${id}`);
 
             // Removing deleted theatre from the existing array
             setTheatres(theatres.filter(theatre => theatre._id !== id));
@@ -73,17 +73,22 @@ function AdminTheatrePage() {
                         </div>
                     </div>
                 </div>
-                {/* List of Theatres */}
+
                 {filteredTheatres.map((theatre) => (
                     <div className="list-group-item bg" key={theatre._id}>
-                        <div className="row">
-                            <h5 className="mb-1 col-6 col-md-5">{theatre.name}</h5>
-                            {/* <p className="mb-1 col-6 col-md-4">{theatre.address.city}</p> */}
-                            <div className='col-6 offset-md-3 col-md-4 dash-btn-div'>
-                            <Link to={`/theatre/${theatre._id}`} className="link"> Show </Link>
-                            <Link to={`/dashboard/theatres/addShowTimes/${theatre._id}`} className="link"> Add Shows </Link>
-                                <Link to={`/dashboard/theatres/edit/${theatre._id}`} className="link"> Edit </Link>
-                                <button onClick={() => handleShowModal(theatre)} className="link btn-delete"> Delete </button>
+                        <div className="row align-items-center">
+
+                            {/* Theatre Name */}
+                            <div className="col-12 col-md-5 mb-2 mb-md-0">
+                                <h5 className="mb-1">{theatre.name}</h5>
+                            </div>
+
+                            {/* Buttons aligned right on md+ and stacked on small screens */}
+                            <div className="col-12 col-md-7 text-md-end text-start">
+                                <Link to={`/theatre/${theatre._id}`} className="link me-3">Show</Link>
+                                <Link to={`/dashboard/theatres/addShowTimes/${theatre._id}`} className="link me-3">Add Shows</Link>
+                                <Link to={`/dashboard/theatres/edit/${theatre._id}`} className="link me-3">Edit</Link>
+                                <button onClick={() => handleShowModal(theatre)} className="link btn-delete">Delete</button>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { Navigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ function LoginForm() {
     const onsubmit = async (data) => {
         try {
             const response = await axios.post(
-                'http://localhost:8080/login',
+                '/login',
                 data,
                 { withCredentials: true }
             );

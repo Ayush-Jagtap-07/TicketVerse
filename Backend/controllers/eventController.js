@@ -1,8 +1,10 @@
 const Event = require("../models/eventModel");
 const User = require("../models/userModel");
+const Booking = require("../models/bookingModel");
 const { convertTo12HourFormat, sendTicketEmail, generateTicketPDF } = require("../utils/helper");
 const path = require('path');
 const fs = require('fs');
+const ExpressError = require("../utils/ExpressError");
 
 module.exports.getAllEvents = async (req, res) => {
     try {
@@ -37,15 +39,34 @@ module.exports.getEventDetails = async (req, res) => {
 module.exports.addNewEvent = async (req, res) => {
     try {
         // Validate request body
-        if (!req.body.name || !req.body.venue || !req.body.date) {
+        if (!req.body.name || !req.body.venueName || !req.body.date) {
             throw new ExpressError(400, "Send valid data!");
         }
 
-        // Saving the new event to the database
-        const newEvent = new Event(req.body);
+        // Ensure poster is uploaded
+        if (!req.file || !req.file.path) {
+            throw new ExpressError(400, "Poster image is required.");
+        }
+        const { name, category, description, date, time, organizer, ticketsAvailable, price } = req.body;
+        // venue is nested — parse as JSON if sent as string (optional)
+        const venue = {
+            name: req.body.venueName,
+            address: req.body.venueAddress
+        };
 
-        let newTime = convertTo12HourFormat(newEvent.time);
-        newEvent.time = newTime;
+        // Create new event object
+        const newEvent = new Event({
+            name,
+            venue,
+            date,
+            time: convertTo12HourFormat(time),
+            description: description,
+            price: price,
+            organizer: organizer,
+            category,
+            ticketsAvailable,
+            posterUrl: req.file.path, // Cloudinary image URL
+        });
 
         await newEvent.save();
 
@@ -55,7 +76,7 @@ module.exports.addNewEvent = async (req, res) => {
         console.error("Error adding event:", error.message);
         res.status(error.status || 500).json({ error: error.message });
     }
-}
+};
 
 module.exports.updateMovieDetails = async (req, res) => {
     try {
@@ -114,7 +135,19 @@ exports.bookTickets = async (req, res) => {
         console.log("About to generate PDF at:", filePath);
 
         // Generate ticket PDF
-        await generateTicketPDF({
+        // await generateTicketPDF({
+        //     eventName: event.name,
+        //     name: user.username,
+        //     email: user.email,
+        //     ticketCount,
+        //     eventDate: event.date.toDateString(),
+        //     eventTime: event.time,
+        //     venueName: event.venue.name,
+        //     venueAddress: event.venue.address,
+        //     organizer: event.organizer,
+        //     price: event.price
+        // }, filePath, "event");
+        const pdfBuffer = await generateTicketPDF({
             eventName: event.name,
             name: user.username,
             email: user.email,
@@ -124,14 +157,26 @@ exports.bookTickets = async (req, res) => {
             venueName: event.venue.name,
             venueAddress: event.venue.address,
             organizer: event.organizer,
-            price: event.price
-        }, filePath, "event");
+            price: event.price*ticketCount
+        }, "event");
         console.log("PDF generation completed successfully");
+
+        // Save booking to DB
+        const booking = new Booking({
+            userId,
+            eventId,
+            ticketCount,
+            amountPaid: ticketCount * event.price,
+            paymentId,
+            paymentStatus: 'Success',
+            ticketUrl: filePath
+        });
+        await booking.save();
 
         console.log("📨 Preparing to send email...");
 
         // Send email
-        await sendTicketEmail(user.email, user.username, filePath, "event");
+        await sendTicketEmail(user.email, user.username, pdfBuffer, "event");
 
         console.log("✅ Email function awaited");
 

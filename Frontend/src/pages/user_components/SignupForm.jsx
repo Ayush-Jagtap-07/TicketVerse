@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { useForm } from 'react-hook-form';
 
 function SignUpForm() {
@@ -8,7 +8,7 @@ function SignUpForm() {
     const onsubmit = async (data) => {
         try {
             const response = await axios.post(
-                'http://localhost:8080/signup',
+                '/signup',
                 data,
                 { withCredentials: true } 
             );

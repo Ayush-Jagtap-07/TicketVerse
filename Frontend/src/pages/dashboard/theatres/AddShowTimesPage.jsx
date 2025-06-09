@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios from "../../../api/axios";
 import { useParams } from "react-router-dom";
 
 const AddShowtimesPage = () => {
@@ -14,8 +14,8 @@ const AddShowtimesPage = () => {
     useEffect(() => {
         // Fetch theatres and movies
         const fetchData = async () => {
-            const theatreRes = await axios.get(`http://localhost:8080/theatre/${id}`);
-            const movieRes = await axios.get("http://localhost:8080/movie/all-movies");
+            const theatreRes = await axios.get(`/theatre/${id}`);
+            const movieRes = await axios.get("/movie/all-movies");
             setTheatre(theatreRes.data);
             setMovies(movieRes.data);
         };
@@ -26,7 +26,7 @@ const AddShowtimesPage = () => {
         try {
             data.theatreId = theatre._id
             console.log(data);
-            const response = await axios.post("http://localhost:8080/theatre/add-showtime", data);
+            const response = await axios.post("/theatre/add-showtime", data);
 
             if (response.status === 201) {
                 // setMessage('Show time added successfully!');
