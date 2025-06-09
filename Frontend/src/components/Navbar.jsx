@@ -1,16 +1,22 @@
 // import axios from 'axios';
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
     const { user } = useAuth();
+    const navigate = useNavigate();
     console.log(user);
 
     const handleclick = () => {
-        axiosInstance.post('/logout');
-    }
+        axiosInstance.post('/logout', { withCredentials: true })
+            .then((res) => {
+                // Manually clearing the non-httpOnly token cookie
+                document.cookie = "token=; path=/; max-age=0; secure; samesite=none";
+                navigate('/signup_login');
+            });
+    };
 
     return (
         <nav className="navbar sticky-top navbar-expand-md navbar-light bg-light">
