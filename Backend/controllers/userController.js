@@ -49,15 +49,15 @@ module.exports.loginUser = (req, res, next) => {
                 secure: true, // Use secure cookies in production
                 // sameSite: 'Strict',
                 sameSite: 'none',
-                path:"/",
+                path: "/",
                 maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             });
             res.cookie('token', accessToken, {
-                maxAge: 15 * 60 * 1000, 
+                maxAge: 15 * 60 * 1000,
                 secure: true, // Use secure cookies in production
                 // sameSite: 'Strict',
                 sameSite: 'none',
-                path:"/",
+                path: "/",
                 httpOnly: false
             })
 
@@ -103,8 +103,19 @@ module.exports.logoutUser = async (req, res) => {
         const refreshToken = req.cookies?.jwt; // Get refresh token from cookie
         if (!refreshToken) return res.status(401).json({ message: 'Refresh token required' });
 
-        res.clearCookie("token");
-        res.clearCookie("jwt", { httpOnly: true });
+        res.clearCookie('jwt', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/'
+        });
+
+        res.clearCookie('token', {
+            httpOnly: false,
+            secure: true,
+            sameSite: 'none',
+            path: '/'
+        });
 
         res.json({ message: 'Logout successful' });
     } catch (err) {
