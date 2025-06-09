@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 // Attempt to refresh the access token
-                const res = await axios.get('https://ticket-verse-backend.vercel.app/refresh-token', {}, { withCredentials: true });
+                const res = await axios.get('https://ticket-verse-backend.vercel.app/refresh-token', { withCredentials: true });
                 const newAccessToken = res.data.accessToken;
 
                 // Update the original request with the new access token
