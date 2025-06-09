@@ -15,7 +15,7 @@ function Navbar() {
     return (
         <nav className="navbar sticky-top navbar-expand-md navbar-light bg-light">
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/" > <img src="/public/images/logo.png" alt="Bootstrap" width="60" height="50" /> </Link>
+                <Link className="navbar-brand" to="/" > <img src="images/logo.png" alt="Bootstrap" width="60" height="50" /> </Link>
                 <Link className="navbar-brand" to="/">TicketVerse</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" >
                     <span className="navbar-toggler-icon"></span>
