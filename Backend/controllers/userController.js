@@ -47,13 +47,13 @@ module.exports.loginUser = (req, res, next) => {
             res.cookie('jwt', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-                sameSite: 'None',
+                sameSite: 'Strict',
                 maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             });
             res.cookie('token', accessToken, {
                 maxAge: 1 * 60 * 1000, 
                 secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-                sameSite: 'None',
+                sameSite: 'Strict',
             })
 
             // Send access token to the client

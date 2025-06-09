@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
             // If no token, try refreshing the token
             axios.get("/refresh-token", { withCredentials: true })
                 .then((res) => {
+                    console.log(res.data.accessToken);
                     Cookies.set("token", res.data.accessToken, { path: "/", expires: new Date(new Date().getTime() + 15 * 60 * 1000)});
                     const decodedToken = jwtDecode(res.data.accessToken);
                     // console.log("Decoded refresh token :"+{decodedToken})
