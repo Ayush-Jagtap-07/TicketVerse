@@ -46,14 +46,18 @@ module.exports.loginUser = (req, res, next) => {
             // Set refresh token in an HTTP-only cookie
             res.cookie('jwt', refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-                sameSite: 'Strict',
+                secure: true, // Use secure cookies in production
+                // sameSite: 'Strict',
+                sameSite: 'none',
+                path:"/",
                 maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             });
             res.cookie('token', accessToken, {
                 maxAge: 15 * 60 * 1000, 
                 secure: true, // Use secure cookies in production
-                sameSite: 'Strict',
+                // sameSite: 'Strict',
+                sameSite: 'none',
+                path:"/",
                 httpOnly: false
             })
 
