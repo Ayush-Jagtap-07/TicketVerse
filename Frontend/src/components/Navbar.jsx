@@ -9,7 +9,7 @@ function Navbar() {
     console.log(user);
 
     const handleclick = () => {
-        axiosInstance.post('logout');
+        axiosInstance.post('/logout');
     }
 
     return (
