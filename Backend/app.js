@@ -29,7 +29,7 @@ const { verifyJWT, authorizeRoles } = require('./middleware/auth');
 // Configure CORS middleware
 app.use(
     cors({
-        origin: 'https://ticket-verse-ten.vercel.app/', // Frontend URL
+        origin: 'https://ticket-verse-ten.vercel.app', // Frontend URL
         credentials: true,              // Allow credentials (cookies)
     })
 );
