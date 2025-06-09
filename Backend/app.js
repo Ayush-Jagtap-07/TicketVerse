@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV != "production"){
+if (process.env.NODE_ENV != "production") {
     require('dotenv').config();
 }
 
@@ -31,6 +31,8 @@ app.use(
     cors({
         origin: 'https://ticket-verse-ten.vercel.app', // Frontend URL
         credentials: true,              // Allow credentials (cookies)
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization']
     })
 );
 

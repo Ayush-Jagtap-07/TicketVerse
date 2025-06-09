@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
-import axios from "../api/axios"; 
+import axios from "../api/axios";
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
@@ -18,16 +18,19 @@ export const AuthProvider = ({ children }) => {
             // If no token, try refreshing the token
             axios.get("/refresh-token", { withCredentials: true })
                 .then((res) => {
-                    console.log(res.data.accessToken);
-                    Cookies.set("token", res.data.accessToken, { path: "/", expires: new Date(new Date().getTime() + 15 * 60 * 1000)});
+                    console.log("Auth context accesstoken :", res.data.accessToken);
+                    Cookies.set("token", res.data.accessToken, {
+                        path: "/", expires: new Date(new Date().getTime() + 15 * 60 * 1000), secure: true, // Required for HTTPS
+                        sameSite: 'none'
+                    });
                     const decodedToken = jwtDecode(res.data.accessToken);
                     // console.log("Decoded refresh token :"+{decodedToken})
                     // console.log(decodedToken)
                     setUser({
                         id: decodedToken.id,
                         role: decodedToken.role,
-                        name: decodedToken.name, 
-                        email: decodedToken.email, 
+                        name: decodedToken.name,
+                        email: decodedToken.email,
                         isLoggedIn: true,
                     });
                 })
@@ -44,24 +47,24 @@ export const AuthProvider = ({ children }) => {
             setUser({
                 id: decodedToken.id,
                 role: decodedToken.role,
-                name: decodedToken.name, 
-                email: decodedToken.email, 
+                name: decodedToken.name,
+                email: decodedToken.email,
                 isLoggedIn: true,
             });
             setLoading(false);
         }
-    }, [cookies.token]); 
-
+    }, []);
+    // cookies.token
     // useEffect(() => {
     //     const fetchUser = async () => {
     //         let token = Cookies.get("token");
-    
+
     //         if (!token) {
     //             try {
     //                 const res = await axios.get("/refresh-token", { withCredentials: true });
     //                 token = res.data.accessToken;
     //                 Cookies.set("token", token, { path: "/", expires: new Date(new Date().getTime() + 10 * 60 * 1000) });
-    
+
     //                 const decodedToken = jwtDecode(token);
     //                 setUser({
     //                     id: decodedToken.id,
@@ -80,13 +83,13 @@ export const AuthProvider = ({ children }) => {
     //                 isLoggedIn: true,
     //             });
     //         }
-    
+
     //         setLoading(false);
     //     };
-    
+
     //     fetchUser();
     // }, [cookies.token]); 
-    
+
 
 
     return (

@@ -52,8 +52,9 @@ module.exports.loginUser = (req, res, next) => {
             });
             res.cookie('token', accessToken, {
                 maxAge: 1 * 60 * 1000, 
-                secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+                secure: true, // Use secure cookies in production
                 sameSite: 'Strict',
+                httpOnly: false
             })
 
             // Send access token to the client
