@@ -169,7 +169,6 @@ exports.bookTickets = async (req, res) => {
             amountPaid: ticketCount * event.price,
             paymentId,
             paymentStatus: 'Success',
-            ticketUrl: filePath
         });
         await booking.save();
 

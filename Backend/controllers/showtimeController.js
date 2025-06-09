@@ -113,8 +113,7 @@ module.exports.bookShowTickets = async (req, res) => {
       seats: seats.map(seat => seat.seatNumber),
       amountPaid: totalAmount,
       paymentId,
-      paymentStatus: 'Success',
-      ticketUrl: filePath
+      paymentStatus: 'Success'
     })
     await booking.save();
 
