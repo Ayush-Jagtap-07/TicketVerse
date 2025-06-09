@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
     const { user } = useAuth();
-    // console.log(user);
+    console.log(user);
 
     const handleclick = () => {
         axiosInstance.post('logout');
