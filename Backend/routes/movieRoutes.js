@@ -13,7 +13,7 @@ router.get("/movie-ids", movieController.getAllMovieIds );
 router.get("/all-movies", movieController.getAllMovies );
 
 // Endpoint to retrieve detailed information about a specific movie by ID
-router.get("/:id", verifyJWT, movieController.getMovieDetails );
+router.get("/:id", movieController.getMovieDetails );
 
 // Endpoint to add a new movie to the dashboard
 router.post("/add", upload.single('poster'), movieController.addNewMovie );
